@@ -16,7 +16,7 @@
 - [System debugging](#system-debugging)
 - [One-liners](#one-liners)
 - [Obscure but useful](#obscure-but-useful)
-- [OS X only](#os-x-only)
+- [macOS only](#macos-only)
 - [Windows only](#windows-only)
 - [More resources](#more-resources)
 - [Disclaimer](#disclaimer)
@@ -39,13 +39,13 @@ but it has since moved to GitHub, where people more talented than the original a
 Scope:
 
 - This guide is both for beginners and the experienced. The goals are *breadth* (everything important), *specificity* (give concrete examples of the most common case), and *brevity* (avoid things that aren't essential or digressions you can easily look up elsewhere). Every tip is essential in some situation or significantly saves time over alternatives.
-- This is written for Linux, with the exception of the "[OS X only](#os-x-only)" and "[Windows only](#windows-only)" sections. Many of the other items apply or can be installed on other Unices or OS X (or even Cygwin).
+- This is written for Linux, with the exception of the "[macOS only](#macos-only)" and "[Windows only](#windows-only)" sections. Many of the other items apply or can be installed on other Unices or macOS (or even Cygwin).
 - The focus is on interactive Bash, though many tips apply to other shells and to general Bash scripting.
 - It includes both "standard" Unix commands as well as ones that require special package installs -- so long as they are important enough to merit inclusion.
 
 Notes:
 
-- To keep this to one page, content is implicitly included by reference. You're smart enough to look up more detail elsewhere once you know the idea or command to Google. Use `apt-get`, `yum`, `dnf`, `pacman`, `pip` or `brew` (as appropriate) to install new programs.
+- To keep this to one page, content is implicitly included by reference. You're smart enough to look up more detail elsewhere once you know the idea or command to Google. Use `apt`, `yum`, `dnf`, `pacman`, `pip` or `brew` (as appropriate) to install new programs.
 - Use [Explainshell](http://explainshell.com/) to get a helpful breakdown of what commands, options, pipes etc. do.
 
 
@@ -109,7 +109,7 @@ Notes:
 
 - Use `nohup` or `disown` if you want a background process to keep running forever.
 
-- Check what processes are listening via `netstat -lntp` or `ss -plat` (for TCP; add `-u` for UDP) or `lsof -iTCP -sTCP:LISTEN -P -n` (which also works on OS X).
+- Check what processes are listening via `netstat -lntp` or `ss -plat` (for TCP; add `-u` for UDP) or `lsof -iTCP -sTCP:LISTEN -P -n` (which also works on macOS).
 
 - See also `lsof` and `fuser` for open sockets and files.
 
@@ -156,13 +156,19 @@ Notes:
 }
 ```
 
-- Know about "here documents" in Bash, as in `cat <<EOF ...`.
+- A "here document" allows [redirection of multiple lines of input](https://www.tldp.org/LDP/abs/html/here-docs.html) as if from a file:
+```
+cat <<EOF
+input
+on multiple lines
+EOF
+```
 
 - In Bash, redirect both standard output and standard error via: `some-command >logfile 2>&1` or `some-command &>logfile`. Often, to ensure a command does not leave an open file handle to standard input, tying it to the terminal you are in, it is also good practice to add `</dev/null`.
 
 - Use `man ascii` for a good ASCII table, with hex and decimal values. For general encoding info, `man unicode`, `man utf-8`, and `man latin1` are helpful.
 
-- Use `screen` or [`tmux`](https://tmux.github.io/) to multiplex the screen, especially useful on remote ssh sessions and to detach and re-attach to a session. `byobu` can enhance screen or tmux providing more information and easier management. A more minimal alternative for session persistence only is [`dtach`](https://github.com/bogner/dtach).
+- Use `screen` or [`tmux`](https://tmux.github.io/) to multiplex the screen, especially useful on remote ssh sessions and to detach and re-attach to a session. `byobu` can enhance screen or tmux by providing more information and easier management. A more minimal alternative for session persistence only is [`dtach`](https://github.com/bogner/dtach).
 
 - In ssh, knowing how to port tunnel with `-L` or `-D` (and occasionally `-R`) is useful, e.g. to access web sites from a remote server.
 
@@ -214,7 +220,7 @@ Notes:
 
 - To convert HTML to text: `lynx -dump -stdin`
 
-- For Markdown, HTML, and all kinds of document conversion, try [`pandoc`](http://pandoc.org/).
+- For Markdown, HTML, and all kinds of document conversion, try [`pandoc`](http://pandoc.org/). For example, to convert a Markdown document to Word format: `pandoc README.md --from markdown --to docx -o temp.docx`
 
 - If you must handle XML, `xmlstarlet` is old but good.
 
@@ -262,7 +268,7 @@ Notes:
 mkdir empty && rsync -r --delete empty/ some-dir && rmdir some-dir
 ```
 
-- For seeing progress when copying files, use `pv`, [`pycp`](https://github.com/dmerejkowsky/pycp), [`progress`](https://github.com/Xfennec/progress), `rsync --progress`, or, for block-level copying, `dd status=progress`.
+- For monitoring progress when processing files, use [`pv`](http://www.ivarch.com/programs/pv.shtml), [`pycp`](https://github.com/dmerejkowsky/pycp), [`pmonitor`](https://github.com/dspinellis/pmonitor), [`progress`](https://github.com/Xfennec/progress), `rsync --progress`, or, for block-level copying, `dd status=progress`.
 
 - Use `shuf` to shuffle or select random lines from a file.
 
@@ -538,23 +544,23 @@ A few examples of piecing together commands:
 - `fortune`, `ddate`, and `sl`: um, well, it depends on whether you consider steam locomotives and Zippy quotations "useful"
 
 
-## OS X only
+## macOS only
 
-These are items relevant *only* on OS X.
+These are items relevant *only* on macOS.
 
-- Package management with `brew` (Homebrew) and/or `port` (MacPorts). These can be used to install on OS X many of the above commands.
+- Package management with `brew` (Homebrew) and/or `port` (MacPorts). These can be used to install on macOS many of the above commands.
 
 - Copy output of any command to a desktop app with `pbcopy` and paste input from one with `pbpaste`.
 
-- To enable the Option key in OS X Terminal as an alt key (such as used in the commands above like **alt-b**, **alt-f**, etc.), open Preferences -> Profiles -> Keyboard and select "Use Option as Meta key".
+- To enable the Option key in macOS Terminal as an alt key (such as used in the commands above like **alt-b**, **alt-f**, etc.), open Preferences -> Profiles -> Keyboard and select "Use Option as Meta key".
 
 - To open a file with a desktop app, use `open` or `open -a /Applications/Whatever.app`.
 
 - Spotlight: Search files with `mdfind` and list metadata (such as photo EXIF info) with `mdls`.
 
-- Be aware OS X is based on BSD Unix, and many commands (for example `ps`, `ls`, `tail`, `awk`, `sed`) have many subtle variations from Linux, which is largely influenced by System V-style Unix and GNU tools. You can often tell the difference by noting a man page has the heading "BSD General Commands Manual." In some cases GNU versions can be installed, too (such as `gawk` and `gsed` for GNU awk and sed). If writing cross-platform Bash scripts, avoid such commands (for example, consider Python or `perl`) or test carefully.
+- Be aware macOS is based on BSD Unix, and many commands (for example `ps`, `ls`, `tail`, `awk`, `sed`) have many subtle variations from Linux, which is largely influenced by System V-style Unix and GNU tools. You can often tell the difference by noting a man page has the heading "BSD General Commands Manual." In some cases GNU versions can be installed, too (such as `gawk` and `gsed` for GNU awk and sed). If writing cross-platform Bash scripts, avoid such commands (for example, consider Python or `perl`) or test carefully.
 
-- To get OS X release information, use `sw_vers`.
+- To get macOS release information, use `sw_vers`.
 
 ## Windows only
 
@@ -595,7 +601,7 @@ These items are relevant *only* on Windows.
 ## More resources
 
 - [awesome-shell](https://github.com/alebcay/awesome-shell): A curated list of shell tools and resources.
-- [awesome-osx-command-line](https://github.com/herrbischoff/awesome-osx-command-line): A more in-depth guide for the OS X command line.
+- [awesome-osx-command-line](https://github.com/herrbischoff/awesome-osx-command-line): A more in-depth guide for the macOS command line.
 - [Strict mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/) for writing better shell scripts.
 - [shellcheck](https://github.com/koalaman/shellcheck): A shell script static analysis tool. Essentially, lint for bash/sh/zsh.
 - [Filenames and Pathnames in Shell](http://www.dwheeler.com/essays/filenames-in-shell.html): The sadly complex minutiae on how to handle filenames correctly in shell scripts.
